@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "research-ultils"
+version = "0.1.0"
+description = ""
+authors = ["Alex H"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.13"
+ollama = "^0.6.1"
+python-dotenv = "^1.2.1"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "ruff (>=0.14.10,<0.15.0)",
+    "pytest (>=9.0.2,<10.0.0)"
+]

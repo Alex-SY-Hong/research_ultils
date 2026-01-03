@@ -201,6 +201,11 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 
+# Vim
+#  Ignore temp files
+*~
+*.swp
+
 # Marimo
 marimo/_static/
 marimo/_lsp/
