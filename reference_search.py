@@ -1,13 +1,13 @@
 # vim: set foldmethod=indent foldlevel=0:
+
 """
-用谷歌学术搜索参考文献。
-主要是校对的时候的辅助工具
-这个项目的idea是正则表达式。但实际上的文本很可能有点小问题，比如说et al.的处理，比如说
-可能会把.笔误成;。明天可以再写个llm版本的。
+用谷歌学术搜索参考文献。主要是校对的时候的辅助工具。用了llm进行parse，比正则表达式之类
+的工具更加robust。不过用的llm也有讲究，不是所有模型都能合理回答的，有些会选择说“好的，
+我会xxx”之类。最奇怪的是gemma3n:e4b，跑不通单元测试的理由是它会把artificial拼成
+artiificial (ˉ▽ˉ；)...
 """
 
 import os
-import re
 import time
 import urllib.parse
 import webbrowser
@@ -21,10 +21,6 @@ from ollama import ChatResponse, chat
 load_dotenv()
 ollama_model = os.getenv("OLLAMA_MODEL_REFERENCE")
 RAW_CONTENT = os.getenv("RAW_CONTENT_REFERENCE")
-
-
-#  RAW_CONTENT = """
-#  """
 
 
 def sleep_after(seconds: float = 1.0):
@@ -42,27 +38,6 @@ def sleep_after(seconds: float = 1.0):
         return wrapper
 
     return decorator
-
-
-def quote_to_article(citation: str) -> str:
-    """
-    string -> string
-    Vancoveour格式，删掉大写字母.以前，以及下一个句号以后的所有内容
-    """
-    pattern = re.compile(r".*[A-Z]\.")
-    match = pattern.search(citation)
-
-    if match:
-        remaining = citation[match.end() :].strip()
-    else:
-        remaining = citation.strip()
-
-    first_dot_index = remaining.find(".")
-
-    if first_dot_index != -1:
-        return remaining[:first_dot_index].strip()
-
-    return remaining
 
 
 def quote_to_article_llm(citation: str) -> str:
